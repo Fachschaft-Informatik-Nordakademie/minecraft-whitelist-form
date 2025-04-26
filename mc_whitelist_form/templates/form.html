@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+    <article>
+        <hgroup>
+            <h1>Whitelist Formular</h1>
+            <p>Nordakademie Minecraft Server</p>
+        </hgroup>
+        <hr>
+        <p>
+            Um den gemeinsamen Server frei von ungebetenen Gästen zu halten, haben wir eine Whitelist aktiviert.
+            Das bedeutet, dass nur explizit zugelassene Spieler dem Server beitreten können.
+            <br>
+            Auf diese Weise wollen wir einen sicheren Rahmen für ein angenehmes Miteinander schaffen und bitten dich,
+            dieses Ziel mitzuverfolgen.
+        </p>
+        <p>
+            Als Nordakademie-Student oder -Alumni kannst du über folgendes Formular Spieler zu der Whitelist hinzufügen;
+            dich selbst, sowie direkte Freunde von dir.
+            <br>
+            Beachte bitte dabei, dass du für Fehlverhalten der durch dich hinzugefügten Spieler mitverantwortlich
+            gemacht werden kannst. Gehe mit dieser Funktion daher bitte sorgsam um.
+        </p>
+    </article>
+
+    {% if error %}
+    <article style="background-color: var(--pico-color-red); color: white">
+        Fehler: {{ error }}
+    </article>
+    {% endif %}
+    {% if success %}
+    <article style="background-color: var(--pico-color-green-500); color: white">
+        Erfolgreich: {{ success }}
+    </article>
+    {% endif %}
+
+    <article>
+        <form action="#" method="post">
+            <label>
+                Deine Nordakademie E-Mail-Adresse
+                <input type="text" name="mail">
+                <small>Studierende: max.muster@nordakademie.de / Alumni: max.muster.a20b@nordakademie.org</small>
+            </label>
+            <label>
+                Minecraft Spielername
+                <input type="text" name="user">
+                <small>Dein eigener oder der eines Freundes, für den du die Verantwortung übernimmst</small>
+            </label>
+            <br>
+            <ol>
+                <li>Mit Klick auf folgenden Button wird eine Bestätigungsmail verschickt. Falls du sie nicht findest,
+                    schaue unbedingt auch im Spam-Ordner nach.
+                </li>
+                <li>Klicke auf den Link in der E-Mail, um den Spieler auf die Whitelist zu setzen.</li>
+                <li>Trete dem Server bei und beteilige dich an einem guten Miteinander. Die Serveradresse lautet
+                    <code>nak-inf.de</code>.
+                </li>
+                <li>Der offizielle Discord-Server ist über folgenden Invite-Link zu erreichen:
+                    <a href="https://discord.gg/invite/FIXME">https://discord.gg/invite/FIXME</a></li>
+            </ol>
+            <input type="submit" value="Abschicken">
+        </form>
+    </article>
+{% endblock %}

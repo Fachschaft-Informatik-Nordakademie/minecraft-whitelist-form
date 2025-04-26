@@ -1,0 +1,4 @@
+flask
+click
+flask-mail
+requests
