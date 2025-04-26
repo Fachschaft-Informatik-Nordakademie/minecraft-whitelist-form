@@ -12,6 +12,7 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'db.sqlite3'),
         ALLOWED_MAIL_SUFFIXES=["@nordakademie.de", "@nordakademie.org"],
         BASE_URL="http://localhost:5000",
+        ADMIN_SECRET="buffalo",
         EXAROTON_API_TOKEN="",
         EXAROTON_SERVER_ID="",
         MAIL_SERVER="localhost",

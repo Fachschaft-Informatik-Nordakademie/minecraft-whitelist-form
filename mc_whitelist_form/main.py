@@ -14,6 +14,30 @@ from mc_whitelist_form import mailsender
 bp = Blueprint('main', __name__)
 
 
+@bp.get("/admin")
+def list_requests():
+    if request.args.get("secret") != current_app.config["ADMIN_SECRET"]:
+        return render_template("error.html", error="Authentifizierung fehlgeschlagen.")
+
+    def convert_date(epoch: int):
+        if epoch is not None:
+            return datetime.fromtimestamp(epoch).strftime('%d.%m.%Y %H:%M:%S UTC')
+        return None
+
+    db = get_db()
+    dbc = db.cursor()
+
+    reqs = []
+    dbc.execute('SELECT * FROM requests')
+    for r in dbc.fetchall():
+        r = dict(r)
+        r["request_date"] = convert_date(r["request_date"])
+        r["accept_date"] = convert_date(r["accept_date"])
+        reqs.append(r)
+
+    return render_template("list.html", reqs=reqs)
+
+
 @bp.get("/")
 def serve_form():
     return render_template("form.html")
@@ -39,7 +63,7 @@ def parse_form():
     if dbc.fetchone():
         return render_template("form.html", error=f"{user} wurde bereits zur Whitelist hinzugefügt.")
 
-    now = datetime.now(timezone.utc)
+    now = int(datetime.now(timezone.utc).timestamp())
     secret = "".join(random.choices(string.ascii_letters+string.digits, k=32))
     dbc.execute('INSERT INTO requests (username, mail, secret, request_date) VALUES (?, ?, ?, ?)', (user, mail, secret, now))
     db.commit()
@@ -64,7 +88,7 @@ def verify():
     if not added:
         return render_template("error.html", error="Ein Fehler beim Hinzufügen zur Whitelist ist aufgetreten. Bist du dir sicher, dass der Spielername korrekt geschrieben ist?")
 
-    now = datetime.now(timezone.utc)
+    now = int(datetime.now(timezone.utc).timestamp())
     dbc.execute("UPDATE requests SET accept_date = ? WHERE username = ? AND secret = ? AND accept_date IS NULL", (now, user, secret))
     db.commit()
 

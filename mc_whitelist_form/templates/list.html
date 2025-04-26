@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<article style="border: 0.2rem solid var(--pico-color-red);">
+    <h1>Liste aller Anfragen</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>E-Mail-Adresse</th>
+                <th>Username</th>
+                <th>Anfragedatum</th>
+                <th>Bestätigungsdatum</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in reqs %}
+            <tr>
+                <td>{{ req.mail }}</td>
+                <td>{{ req.username }}</td>
+                <td>{{ req.request_date }}</td>
+                <td>{{ req.accept_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</article>
+{% endblock %}

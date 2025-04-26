@@ -5,10 +5,19 @@ ihre Zugehörigkeit zur Nordakademie mittels E-Mail-Verifikation bewiesen haben.
 
 ## Setup
 
-Es ist eine Flask App. Sie lässt sich durch gängige WSGI Tools wie `waitress` deployen.
+### Dependencies
 
 ```bash
+pip install -r requirements.txt
+```
+
+### Deployment
+
+Es ist eine Flask App. Sie lässt sich durch gängige WSGI Tools wie `waitress` deployen.
+Zuvor muss nur einmalig die Datenbank initialisiert werden.
+```bash
 pip install waitress
+flask --app mc_whitelist_form init-db
 waitress-serve --call 'mc_whitelist_form:create_app'
 ```
 
