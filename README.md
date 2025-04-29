@@ -33,6 +33,7 @@ Folgende Konfigurationen sind möglich:
 
 - `DATABASE` (Pfad zur sqlite Datei)
 - `ALLOWED_MAIL_SUFFIXES`
+- `ADMIN_SECRET` (Shared secret for accessing the list of all requests)
 - `BASE_URL` (Von außen erreichbare URL der Webanwendung inkl. `http(s)://`)
 - `EXAROTON_API_TOKEN` (User Access Token von Exaroton)
 - `EXAROTON_SERVER_ID` (Unique Server ID; steht unter dem Servernamen; ohne #)

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, current_app
 from flask_mail import Mail
 
 mailsender = Mail()
