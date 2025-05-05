@@ -12,15 +12,15 @@ services:
       - MCWLF_EXAROTON_API_TOKEN=
       - MCWLF_EXAROTON_SERVER_ID=
       - MCWLF_ADMIN_SECRET=
-      - MCWLF_MAIL_SERVER=
-      - MCWLF_MAIL_PORT=
-      - MCWLF_MAIL_USE_TLS=
-      - MCWLF_MAIL_USE_SSL=
+      - MCWLF_MAIL_SERVER=smtp.mailbox.org
+      - MCWLF_MAIL_PORT=465
+      - MCWLF_MAIL_USE_TLS=true
+      - MCWLF_MAIL_USE_SSL=false
       - MCWLF_MAIL_USERNAME=
       - MCWLF_MAIL_PASSWORD=
-      - MCWLF_MAIL_DEFAULT_SENDER=
-      #- MCWLF_DATABASE= # optional, default "./instance/db.sqlite3" (routed to volume)
-      #- MCWLF_ALLOWED_MAIL_SUFFIXES= # optional, default ["@nordakademie.de", "@nordakademie.org"]
+      - MCWLF_MAIL_DEFAULT_SENDER=minecraft@nak-inf.de
+      #- MCWLF_DATABASE= # optional, sensible default: "./instance/db.sqlite3" (routed to volume)
+      #- MCWLF_ALLOWED_MAIL_SUFFIXES= # optional, sensible default: ["@nordakademie.de", "@nordakademie.org"]
 
 volumes:
   mcwlf_data:
