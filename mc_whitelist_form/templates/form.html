@@ -57,7 +57,14 @@
                 <li>Der offizielle Discord-Server ist über folgenden Invite-Link zu erreichen:
                     <a href="https://discord.gg/sSRtrVRwk7">https://discord.gg/sSRtrVRwk7</a></li>
             </ol>
-            <input type="submit" value="Abschicken">
+            <button onclick="submitForm(this)" type="submit">Abschicken</button>
         </form>
     </article>
+    <script>
+        function submitForm(btn) {
+            btn.form.submit();
+            btn.setAttribute('aria-busy', 'true');
+            btn.disabled = true;
+        }
+    </script>
 {% endblock %}
