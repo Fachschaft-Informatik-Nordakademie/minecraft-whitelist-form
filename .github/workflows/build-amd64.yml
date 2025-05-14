@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image (amd64)
 
 # This workflow runs when any of the following occur:
 # - A push is made to a branch called `main` or `seed`

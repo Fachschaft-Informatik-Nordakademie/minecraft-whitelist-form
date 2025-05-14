@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image (arm64)
 
 # This workflow runs when any of the following occur:
 # - A push is made to a branch called `main` or `seed`
@@ -18,7 +18,7 @@ env:
 jobs:
   # This pushes the image to GitHub Packages.
   push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       packages: write
       contents: read
