@@ -71,22 +71,26 @@ def parse_form():
     _send_confirmation_mail(mail, user, secret)
     return render_template("form.html", success="Wir haben deine Anfrage erhalten. Bitte überprüfe deine E-Mails.")
 
-@bp.get("/verify")
+@bp.route("/verify", methods=["GET", "POST"])
 def verify():
-    user = request.args.get("user")
-    secret = request.args.get("secret")
+    user = request.form.get("user") or request.args.get("user")
+    secret = request.form.get("secret") or request.args.get("secret")
+    confirm = request.form.get("confirm")
     if not (user and secret):
         return render_template("error.html", error="Fehlende URL-Parameter")
 
     db = get_db()
     dbc = db.cursor()
-    dbc.execute("SELECT 1 FROM requests WHERE username = ? AND secret = ? and accept_date IS NOT NULL", (user, secret))
-    if dbc.fetchone():
+    dbc.execute("SELECT 1 FROM requests WHERE username = ? AND secret = ? and accept_date IS NULL", (user, secret))
+    if not dbc.fetchone():
         return render_template("error.html", error="Die übermittelten Parameter sind ungültig oder der Spieler wurde bereits zur Whitelist hinzugefügt.")
+
+    if confirm != "yes":
+        return render_template("confirm.html", user=user, secret=secret)
 
     added = _add_to_whitelist(user)
     if not added:
-        return render_template("error.html", error="Ein Fehler beim Hinzufügen zur Whitelist ist aufgetreten. Bist du dir sicher, dass der Spielername korrekt geschrieben ist?")
+        return render_template("error.html", error="Ein Fehler beim Hinzufügen zur Whitelist ist aufgetreten. Sollte der Fehler mehrfach auftreten, wende dich bitte an die Fachschaft Informatik.")
 
     now = int(datetime.now(timezone.utc).timestamp())
     dbc.execute("UPDATE requests SET accept_date = ? WHERE username = ? AND secret = ? AND accept_date IS NULL", (now, user, secret))

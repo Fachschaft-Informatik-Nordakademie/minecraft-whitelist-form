@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <article>
+        <h1>Ein letzter Schritt!</h1>
+        <p>Bitte klicke noch auf den folgenden Knopf, um deine Anfrage abschließend zu bestätigen.</p>
+        <br>
+        <form action="#" method="post">
+            <input type="hidden" name="user" value="{{ user }}"/>
+            <input type="hidden" name="secret" value="{{ secret }}"/>
+            <input type="hidden" name="confirm" value="yes"/>
+            <input type="submit" value="{{ user }} zur Whitelist hinzufügen"/>
+        </form>
+    </article>
+{% endblock %}
