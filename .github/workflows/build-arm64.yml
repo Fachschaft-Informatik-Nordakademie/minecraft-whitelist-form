@@ -13,7 +13,7 @@ on:
       - v*
   pull_request:
 env:
-  IMAGE_NAME: minecraft_whitelist_form
+  IMAGE_NAME: minecraft_whitelist_form_arm64
 
 jobs:
   # This pushes the image to GitHub Packages.
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: docker build . --file arm64.Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
