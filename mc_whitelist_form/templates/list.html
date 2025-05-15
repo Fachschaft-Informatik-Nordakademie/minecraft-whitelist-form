@@ -1,4 +1,17 @@
 {% extends "base.html" %}
+{% block width %}{# unset width #}{% endblock %}
+{% block head %}
+    <style>
+        .secret-column {
+            background-color: var(--pico-color);
+            color: var(--pico-color);
+            border-radius: 0.25rem;
+        }
+        .secret-column::selection {
+            color: white;
+        }
+    </style>
+{% endblock %}
 {% block content %}
 <article>
     <h1>Liste aller Anfragen</h1>
@@ -7,6 +20,7 @@
             <tr>
                 <th>E-Mail-Adresse</th>
                 <th>Username</th>
+                <th>Secret</th>
                 <th>Anfragedatum</th>
                 <th>Bestätigungsdatum</th>
             </tr>
@@ -16,6 +30,7 @@
             <tr>
                 <td>{{ req.mail }}</td>
                 <td>{{ req.username }}</td>
+                <td><span class="secret-column">{{ req.secret }}</span></td>
                 <td>{{ req.request_date }}</td>
                 <td>{{ req.accept_date }}</td>
             </tr>

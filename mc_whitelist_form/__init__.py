@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, current_app
+from flask import Flask
 from flask_mail import Mail
 
 mailsender = Mail()
@@ -10,7 +10,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         DATABASE=os.path.join(app.instance_path, 'db.sqlite3'),
-        ALLOWED_MAIL_SUFFIXES=["@nordakademie.de", "@nordakademie.org"],
+        ALLOWED_MAIL_DOMAINS=["nordakademie.de", "nordakademie.org"],
         BASE_URL="http://localhost:5000",
         ADMIN_SECRET="buffalo",
         EXAROTON_API_TOKEN="",
@@ -21,7 +21,10 @@ def create_app(test_config=None):
         MAIL_USE_SSL=False,
         MAIL_USERNAME="",
         MAIL_PASSWORD="",
-        MAIL_DEFAULT_SENDER="noreply@nak-inf.de"
+        MAIL_DEFAULT_SENDER="noreply@nak-inf.de",
+        RATELIMIT_ENABLED=True,
+        RATELIMIT_TIME=5*60, # 5 minutes
+        RATELIMIT_REQUESTS=3
     )
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)

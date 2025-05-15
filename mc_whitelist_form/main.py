@@ -21,14 +21,14 @@ def list_requests():
 
     def convert_date(epoch: int):
         if epoch is not None:
-            return datetime.fromtimestamp(epoch).strftime('%d.%m.%Y %H:%M:%S UTC')
+            return datetime.fromtimestamp(epoch).strftime('%d.%m.%Y %H:%M:%S')
         return None
 
     db = get_db()
     dbc = db.cursor()
 
     reqs = []
-    dbc.execute('SELECT * FROM requests')
+    dbc.execute('SELECT * FROM requests ORDER BY request_date DESC;')
     for r in dbc.fetchall():
         r = dict(r)
         r["request_date"] = convert_date(r["request_date"])
@@ -48,7 +48,7 @@ def parse_form():
     user = request.form.get('user')
     if not (mail and user):
         return render_template("form.html", error="Bitte fülle das Formular vollständig aus.")
-    if not any([mail.endswith(s) for s in current_app.config['ALLOWED_MAIL_SUFFIXES']]):
+    if not any([mail.endswith('@'+s) for s in current_app.config['ALLOWED_MAIL_DOMAINS']]):
         return render_template("form.html", error="Bitte nutze deine Nordakademie-Mailadresse.")
     resp = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{user}")
     if resp.status_code != 200:
@@ -59,13 +59,20 @@ def parse_form():
     db = get_db()
     dbc = db.cursor()
 
-    dbc.execute('SELECT 1 FROM requests WHERE username = ? AND accept_date IS NOT NULL', (user, ))
+    dbc.execute('SELECT 1 FROM requests WHERE username = ? AND accept_date IS NOT NULL;', (user, ))
     if dbc.fetchone():
         return render_template("form.html", error=f"{user} wurde bereits zur Whitelist hinzugefügt.")
 
     now = int(datetime.now(timezone.utc).timestamp())
+
+    if current_app.config["RATELIMIT_ENABLED"]:
+        timeout = now - current_app.config['RATELIMIT_TIME']
+        dbc.execute('SELECT 1 FROM requests WHERE (username = ? OR mail = ?) AND request_date >= ?;', (user, mail, timeout))
+        if len(dbc.fetchall()) > current_app.config['RATELIMIT_REQUESTS']:
+            return render_template("form.html", error="Bitte warte ein paar Minuten, bis du die nächste Anfrage stellst.")
+
     secret = "".join(random.choices(string.ascii_letters+string.digits, k=32))
-    dbc.execute('INSERT INTO requests (username, mail, secret, request_date) VALUES (?, ?, ?, ?)', (user, mail, secret, now))
+    dbc.execute('INSERT INTO requests (username, mail, secret, request_date) VALUES (?, ?, ?, ?);', (user, mail, secret, now))
     db.commit()
 
     _send_confirmation_mail(mail, user, secret)
@@ -81,7 +88,7 @@ def verify():
 
     db = get_db()
     dbc = db.cursor()
-    dbc.execute("SELECT 1 FROM requests WHERE username = ? AND secret = ? and accept_date IS NULL", (user, secret))
+    dbc.execute("SELECT 1 FROM requests WHERE username = ? AND secret = ? and accept_date IS NULL;", (user, secret))
     if not dbc.fetchone():
         return render_template("error.html", error="Die übermittelten Parameter sind ungültig oder der Spieler wurde bereits zur Whitelist hinzugefügt.")
 
@@ -93,7 +100,7 @@ def verify():
         return render_template("error.html", error="Ein Fehler beim Hinzufügen zur Whitelist ist aufgetreten. Sollte der Fehler mehrfach auftreten, wende dich bitte an die Fachschaft Informatik.")
 
     now = int(datetime.now(timezone.utc).timestamp())
-    dbc.execute("UPDATE requests SET accept_date = ? WHERE username = ? AND secret = ? AND accept_date IS NULL", (now, user, secret))
+    dbc.execute("UPDATE requests SET accept_date = ? WHERE username = ? AND secret = ? AND accept_date IS NULL;", (now, user, secret))
     db.commit()
 
     return render_template("success.html", success=f'Spieler "{user}" wurde erfolgreich zur Whitelist hinzugefügt. Viel Spaß beim Spielen.')

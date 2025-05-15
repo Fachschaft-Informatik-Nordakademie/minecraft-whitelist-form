@@ -1,5 +1,6 @@
 services:
   minecraft_whitelist_form:
+    #image: ghcr.io/fachschaft-informatik-nordakademie/minecraft_whitelist_form_arm64:latest
     image: ghcr.io/fachschaft-informatik-nordakademie/minecraft_whitelist_form:latest
     restart: unless-stopped
     container_name: minecraft_whitelist_form
@@ -13,14 +14,17 @@ services:
       - MCWLF_EXAROTON_SERVER_ID=
       - MCWLF_ADMIN_SECRET=
       - MCWLF_MAIL_SERVER=smtp.mailbox.org
-      - MCWLF_MAIL_PORT=465
+      - MCWLF_MAIL_PORT=587
       - MCWLF_MAIL_USE_TLS=true
       - MCWLF_MAIL_USE_SSL=false
       - MCWLF_MAIL_USERNAME=
       - MCWLF_MAIL_PASSWORD=
-      - MCWLF_MAIL_DEFAULT_SENDER=minecraft@nak-inf.de
-      #- MCWLF_DATABASE= # optional, sensible default: "./instance/db.sqlite3" (routed to volume)
-      #- MCWLF_ALLOWED_MAIL_SUFFIXES= # optional, sensible default: ["@nordakademie.de", "@nordakademie.org"]
+      - MCWLF_MAIL_DEFAULT_SENDER=noreply@nak-inf.de
+      #- MCWLF_DATABASE=              # optional, sensible default: "./instance/db.sqlite3" (routed to volume)
+      #- MCWLF_ALLOWED_MAIL_DOMAINS=  # optional, sensible default: ["nordakademie.de", "nordakademie.org"]
+      #- MCWLF_RATELIMIT_ENABLED=     # optional, sensible default: true
+      #- MCWLF_RATELIMIT_TIME=        # optional, sensible default: 300 (5 minutes)
+      #- MCWLF_RATELIMIT_REQUESTS=    # optional, sensible default: 3
 
 volumes:
   mcwlf_data:

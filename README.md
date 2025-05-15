@@ -32,7 +32,7 @@ Die Konfiguration ist über mehrere Ebenen möglich, die sich jeweils überschre
 Folgende Konfigurationen sind möglich:
 
 - `DATABASE` (Pfad zur sqlite Datei)
-- `ALLOWED_MAIL_SUFFIXES`
+- `ALLOWED_MAIL_DOMAINS`
 - `ADMIN_SECRET` (Shared secret for accessing the list of all requests)
 - `BASE_URL` (Von außen erreichbare URL der Webanwendung inkl. `http(s)://`)
 - `EXAROTON_API_TOKEN` (User Access Token von Exaroton)
@@ -44,4 +44,7 @@ Folgende Konfigurationen sind möglich:
 - `MAIL_USERNAME`
 - `MAIL_PASSWORD`
 - `MAIL_DEFAULT_SENDER` (Absenderadresse für E-Mails) 
+- `RATELIMIT_ENABLED` (Allow a maximum of N requests in T seconds per user)
+- `RATELIMIT_TIME` (T)
+- `RATELIMIT_REQUESTS` (N)
 
